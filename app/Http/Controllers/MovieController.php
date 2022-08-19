@@ -75,6 +75,8 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        //
+        $delete = Movie::where('id', $movie->id)->delete();
+
+        return $delete;
     }
 }

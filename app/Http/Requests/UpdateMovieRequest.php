@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class UpdateMovieRequest extends FormRequest
 {
@@ -13,7 +16,7 @@ class UpdateMovieRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +27,24 @@ class UpdateMovieRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => [
+                Rule::unique('movies')->ignore($this->route('movie')),
+                'string', 'max:100'
+            ],
+            'image_url' => ['string'],
+            'genres' => ['array'],
+            'premiered_at' => ['date'],
+            'score' => ['integer', 'between:1,10']
         ];
+    }
+
+    /**
+     * Failed validation disable redirect
+     *
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

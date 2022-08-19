@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Movie;
 
 class CommentController extends Controller
 {
@@ -26,7 +27,13 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //
+        $movie = Movie::find($request->movie_id);
+
+        $comment = new Comment();
+        $comment->content = $request->content;
+
+        $movie->comments()->save($comment);
+        return $comment;
     }
 
     /**

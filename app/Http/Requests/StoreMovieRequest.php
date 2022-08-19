@@ -24,7 +24,12 @@ class StoreMovieRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => ['required', 'unique:movies', 'string', 'max:100'],
+            'image_url' => ['required', 'string'],
+            'genres' => ['required', 'array'],
+            'premiered-at' => ['required', 'date'],
+            'summary' => ['required'],
+            'score' => ['required', 'integer', 'between:1,10']
         ];
     }
 }

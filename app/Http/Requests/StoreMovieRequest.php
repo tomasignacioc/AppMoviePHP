@@ -29,7 +29,7 @@ class StoreMovieRequest extends FormRequest
             'title' => ['required', 'unique:movies', 'string', 'max:100'],
             'image_url' => ['required', 'string'],
             'genres' => ['required', 'array'],
-            'premiered-at' => ['required', 'date'],
+            'premiered_at' => ['required', 'date'],
             'summary' => ['required'],
             'score' => ['required', 'integer', 'between:1,10']
         ];

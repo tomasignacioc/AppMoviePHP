@@ -26,7 +26,16 @@ class MovieController extends Controller
      */
     public function store(StoreMovieRequest $request)
     {
-        //
+        $movie = new Movie();
+        $movie->title = $request->title;
+        $movie->image_url = $request->image_url;
+        $movie->genres = $request->genres;
+        $movie->premiered_at = $request->premiered_at;
+        $movie->summary = $request->summary;
+        $movie->score = $request->score;
+
+        $movie->save();
+        return $movie;
     }
 
     /**

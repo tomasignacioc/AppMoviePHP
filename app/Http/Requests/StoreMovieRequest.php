@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreMovieRequest extends FormRequest
 {
@@ -31,5 +33,15 @@ class StoreMovieRequest extends FormRequest
             'summary' => ['required'],
             'score' => ['required', 'integer', 'between:1,10']
         ];
+    }
+
+    /**
+     * Failed validation disable redirect
+     *
+     * @param Validator $validator
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

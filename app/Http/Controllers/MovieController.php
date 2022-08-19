@@ -62,7 +62,9 @@ class MovieController extends Controller
      */
     public function update(UpdateMovieRequest $request, Movie $movie)
     {
-        //
+        $updatedMovie = Movie::where('id', $movie->id)->update($request->validated());
+
+        return $updatedMovie;
     }
 
     /**

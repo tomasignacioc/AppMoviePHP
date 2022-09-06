@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
@@ -18,6 +19,16 @@ class MovieController extends Controller
         $movies = Movie::all();
 
         return $movies;
+    }
+
+    /**
+     * Display movies ordered by score.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ranking()
+    {
+        return Movie::orderBy('score', 'desc')->take(10)->get();
     }
 
     /**

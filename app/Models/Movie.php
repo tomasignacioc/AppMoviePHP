@@ -13,6 +13,13 @@ class Movie extends Model
     use SoftDeletes;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['title', 'image_url', 'genres', 'premiered_at', 'summary', 'score'];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>

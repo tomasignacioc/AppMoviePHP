@@ -30,14 +30,4 @@ class StoreCommentRequest extends FormRequest
             'content' => ['required']
         ];
     }
-
-    /**
-     * Failed validation disable redirect
-     *
-     * @param Validator $validator
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
-    }
 }

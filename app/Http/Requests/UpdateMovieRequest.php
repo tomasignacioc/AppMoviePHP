@@ -37,14 +37,4 @@ class UpdateMovieRequest extends FormRequest
             'score' => ['integer', 'between:1,10']
         ];
     }
-
-    /**
-     * Failed validation disable redirect
-     *
-     * @param Validator $validator
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
-    }
 }

@@ -28,15 +28,8 @@ class MovieController extends Controller
      */
     public function store(StoreMovieRequest $request)
     {
-        $movie = new Movie();
-        $movie->title = $request->title;
-        $movie->image_url = $request->image_url;
-        $movie->genres = $request->genres;
-        $movie->premiered_at = $request->premiered_at;
-        $movie->summary = $request->summary;
-        $movie->score = $request->score;
+        $movie =  Movie::create($request->validated());
 
-        $movie->save();
         return $movie;
     }
 
@@ -48,9 +41,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie = Movie::find($movie->id);
-
-        return $movie;
+        return $movie->load('comments:id,movie_id,content');
     }
 
     /**
@@ -62,9 +53,9 @@ class MovieController extends Controller
      */
     public function update(UpdateMovieRequest $request, Movie $movie)
     {
-        $updatedMovie = Movie::where('id', $movie->id)->update($request->validated());
+        $movie->update($request->validated());
 
-        return $updatedMovie;
+        return $movie;
     }
 
     /**
@@ -75,8 +66,11 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        $delete = Movie::where('id', $movie->id)->delete();
+        $result = $movie->delete();
 
-        return $delete;
+        if ($result)
+        {
+            return response("Movie deleted successfully", 200);
+        }
     }
 }

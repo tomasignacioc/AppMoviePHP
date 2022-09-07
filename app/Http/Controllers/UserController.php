@@ -44,4 +44,11 @@ class UserController extends Controller
 
         return response()->json(["message" => "email or password doesn't match"], 404);
     }
+
+    public function favorites(Request $request)
+    {
+        $user = User::find($request->user()->id);
+
+        return $user->load('movies:id,title,image_url');
+    }
 }

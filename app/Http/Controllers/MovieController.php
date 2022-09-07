@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -19,6 +20,19 @@ class MovieController extends Controller
         $movies = Movie::all();
 
         return $movies;
+    }
+
+    public function addToFavorites(Request $request, Movie $movie)
+    {
+        try
+        {
+            $user = User::find($request->user()->id);
+            $user->movies()->attach($movie);
+        }
+        catch (\Throwable $th)
+        {
+            throw $th;
+        }
     }
 
     /**

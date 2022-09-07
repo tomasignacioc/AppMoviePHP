@@ -17,7 +17,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        $movies = Movie::all();
+        $movies = Movie::all('id', 'title', 'image_url');
 
         return $movies;
     }

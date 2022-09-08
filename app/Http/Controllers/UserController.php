@@ -42,7 +42,9 @@ class UserController extends Controller
             ]);
         }
 
-        return response()->json(["message" => "email or password doesn't match"], 404);
+        return response()->json(["errors" => [
+            "message" => ["email or password doesn't match"]
+        ]], 404);
     }
 
     public function favorites(Request $request)

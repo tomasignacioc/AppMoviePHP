@@ -18,7 +18,15 @@ class UserController extends Controller
 
         $validateData['password'] = bcrypt($validateData['password']);
 
-        $newUser = User::create($validateData);
+        $newUser = new User;
+        $newUser->name = $validateData['name'];
+        $newUser->email = $validateData['email'];
+        $newUser->password = $validateData['password'];
+        $newUser->save();
+
+        $token = $newUser->createToken('auth_token')->plainTextToken;
+        $newUser->token = $token;
+        $newUser->save();
 
         return $newUser;
     }
@@ -34,12 +42,9 @@ class UserController extends Controller
         if (Auth::attempt($credentials))
         {
             $user = User::where('email', $request->email)->first();
-            $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json([
-                "token" => $token,
-                "type" => "Bearer"
-            ]);
+            return response(["name" => $user->name, 'Authorization' => 'Bearer ' . $user->token])
+                ->header('Authorization', 'Bearer ' . $user->token);
         }
 
         return response()->json(["errors" => [

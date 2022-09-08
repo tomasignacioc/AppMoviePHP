@@ -42,7 +42,7 @@ class MovieController extends Controller
      */
     public function ranking()
     {
-        return Movie::orderBy('score', 'desc')->take(10)->get();
+        return Movie::select('id', 'title', 'score')->orderBy('score', 'desc')->take(10)->get();
     }
 
     /**

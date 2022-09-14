@@ -6,9 +6,21 @@ use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Movie;
+use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class CommentController extends Controller
 {
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only('store');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,12 +39,20 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        $movie = Movie::find($request->movie_id);
+        if ($request->user()->hasComment($request->movie_id))
+        {
+            throw new AuthorizationException('You already commented.');
+        }
+
+        $movie = Movie::findOrFail($request->movie_id);
 
         $comment = new Comment();
         $comment->content = $request->content;
+        $comment->username = $request->user()->name;
+        $comment->user_id = $request->user()->id;
+        $comment->movie_id = $movie->id;
 
-        $movie->comments()->save($comment);
+        $comment->save();
         return $comment;
     }
 

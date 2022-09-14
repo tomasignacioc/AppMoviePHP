@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Notifications\Notifiable;
@@ -43,6 +44,21 @@ class User extends AuthUser
     public function movies(): BelongsToMany
     {
         return $this->belongsToMany(Movie::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function hasMovie(Movie $movie): bool
+    {
+        return $this->movies()->where('id', $movie->id)->exists();
+    }
+
+    public function hasComment($movieId): bool
+    {
+        return $this->comments()->where('movie_id', $movieId)->exists();
     }
 
     use SoftDeletes;

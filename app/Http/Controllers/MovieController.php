@@ -6,6 +6,8 @@ use App\Models\Movie;
 use App\Http\Requests\StoreMovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -26,8 +28,11 @@ class MovieController extends Controller
     {
         try
         {
-            $user = User::find($request->user()->id);
-            $user->movies()->attach($movie);
+            if ($request->user()->hasMovie($movie))
+            {
+                throw new AuthorizationException('Movie already added.');
+            }
+            $request->user()->movies()->attach($movie);
         }
         catch (\Throwable $th)
         {

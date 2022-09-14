@@ -71,7 +71,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        return $movie->load('comments:id,movie_id,content');
+        return $movie->load('comments:id,movie_id,content,username');
     }
 
     /**
